@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-kobo-highlights-importer-plugin",
-	"name": "Kobo Highlights Importer",
+	"id": "obsidian-multiplatform-book-highlights-import-plugin",
+	"name": "Multiplatform Highlights Importer",
 	"version": "2.0.0",
 	"minAppVersion": "0.15.9",
-	"description": "Import highlights from your Kobo device",
-	"author": "Kevin Hellemun",
-	"authorUrl": "https://github.com/OGKevin",
+	"description": "Import  and consolidate highlights from all reading sources.",
+	"author": "wwwkieran",
+	"authorUrl": "https://github.com/wwwkieran",
 	"isDesktopOnly": true
 }
