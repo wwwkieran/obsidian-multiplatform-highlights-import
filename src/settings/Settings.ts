@@ -1,9 +1,11 @@
-import { App, PluginSettingTab, Setting } from "obsidian";
+import {App, Notice, PluginSettingTab, Setting} from "obsidian";
 import KoboHighlightsImporter from "src/main";
 import { FileSuggestor } from "./suggestors/FileSuggestor";
 import { FolderSuggestor } from "./suggestors/FolderSuggestor";
+import fs from "fs";
 
 export const DEFAULT_SETTINGS: KoboHighlightsImporterSettings = {
+	koboSqlitePath: '',
     storageFolder: '',
     includeCreatedDate: false,
     dateFormat: "YYYY-MM-DD",
@@ -15,6 +17,7 @@ export const DEFAULT_SETTINGS: KoboHighlightsImporterSettings = {
 }
 
 export interface KoboHighlightsImporterSettings {
+	koboSqlitePath: string;
     storageFolder: string;
     includeCreatedDate: boolean;
     dateFormat: string;
@@ -34,6 +37,7 @@ export class KoboHighlightsImporterSettingsTab extends PluginSettingTab {
         this.containerEl.empty();
         this.containerEl.createEl('h2', { text: this.plugin.manifest.name });
 
+		this.add_kobo_path()
         this.add_destination_folder();
         this.add_enable_creation_date();
         this.add_date_format();
@@ -43,6 +47,27 @@ export class KoboHighlightsImporterSettingsTab extends PluginSettingTab {
         this.add_highlight_callouts_format();
         this.add_annotation_callouts_format();
     }
+
+	add_kobo_path(): void {
+		new Setting(this.containerEl)
+			.setName("Kobo DB filepath")
+			.setDesc("Path to the kobo db on your system. (Try dragging and dropping the file here)")
+			.addText((text) =>
+				text
+					.setPlaceholder("")
+					.setValue(this.plugin.settings.koboSqlitePath)
+					.onChange(async (value) => {
+						fs.access(value, fs.constants.R_OK, (err) => {
+							if (err) {
+								new Notice('Selected file is not readable')
+							} else {
+								this.plugin.settings.koboSqlitePath = value
+								this.plugin.saveSettings();
+								new Notice('Ready to extract!')
+							}
+						})
+					}));
+	}
 
     add_destination_folder(): void {
         new Setting(this.containerEl)

@@ -3,7 +3,7 @@ import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import { HighlightService, typeWhateverYouWantPlaceholder } from './Highlight';
 import { Bookmark, Content, Highlight } from './interfaces';
-import { Repository } from './repository';
+import { Repository } from '../extract/repository';
 
 describe('HighlightService', async function () {
 

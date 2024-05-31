@@ -1,4 +1,6 @@
 import { BookDetails, ReadStatus } from "../database/interfaces"
+import {IBook} from "../interfaces/IBook";
+import {sanitize} from "sanitize-filename-ts";
 
 export const defaultTemplate = `
 ---
@@ -14,13 +16,11 @@ seriesNumber: {{SeriesNumber}}
 timeSpentReading: {{TimeSpentReading}}
 ---
 
-# {{Title}}
-
-## Description
+### Description
 
 {{Description}}
 
-## Highlights
+### Highlights
 
 {{highlights}}
 `
@@ -28,20 +28,20 @@ timeSpentReading: {{TimeSpentReading}}
 export function applyTemplateTransformations(
 	rawTemplate: string,
 	highlights: string,
-	bookDetails: BookDetails,
+	bookDetails: IBook,
 ): string {
 	return rawTemplate
 		.replace(
 			/{{\s*Title\s*}}/gi,
-			bookDetails.title,
+			sanitize(bookDetails.title),
 		)
 		.replace(
 			/{{\s*Author\s*}}/gi,
-			bookDetails.author,
+			sanitize(bookDetails.author),
 		)
 		.replace(
 			/{{\s*Publisher\s*}}/gi,
-			bookDetails.publisher ?? '',
+			sanitize(bookDetails.publisher ?? ''),
 		)
 		.replace(
 			/{{\s*DateLastRead\s*}}/gi,
@@ -57,11 +57,11 @@ export function applyTemplateTransformations(
 		)
 		.replace(
 			/{{\s*ISBN\s*}}/gi,
-			bookDetails.isbn ?? '',
+			sanitize(bookDetails.isbn ?? ''),
 		)
 		.replace(
 			/{{\s*Series\s*}}/gi,
-			bookDetails.series ?? '',
+			sanitize(bookDetails.series ?? ''),
 		)
 		.replace(
 			/{{\s*SeriesNumber\s*}}/gi,
@@ -69,7 +69,7 @@ export function applyTemplateTransformations(
 		)
 		.replace(
 			/{{\s*TimeSpentReading\s*}}/gi,
-			bookDetails.timeSpentReading?.toString() ?? '',
+			forHumans(bookDetails.timeSpentReading ?? 0),
 		)
 		.replace(
 			/{{\s*Description\s*}}/gi,
@@ -80,4 +80,29 @@ export function applyTemplateTransformations(
 			highlights,
 		)
 		.trim()
+}
+
+/**
+ * Translates seconds into human readable format of seconds, minutes, hours, days, and years
+ *
+ * stolen from https://stackoverflow.com/questions/8211744/convert-time-interval-given-in-seconds-into-more-human-readable-form
+ *
+ * @param  {number} seconds The number of seconds to be processed
+ * @return {string}         The phrase describing the amount of time
+ */
+function forHumans ( seconds: number ) {
+	const levels = [
+		[Math.floor(seconds / 31536000), 'years'],
+		[Math.floor((seconds % 31536000) / 86400), 'days'],
+		[Math.floor(((seconds % 31536000) % 86400) / 3600), 'hours'],
+		[Math.floor((((seconds % 31536000) % 86400) % 3600) / 60), 'minutes'],
+		[(((seconds % 31536000) % 86400) % 3600) % 60, 'seconds'],
+	];
+	let returntext = '';
+
+	for (let i = 0, max = levels.length; i < max; i++) {
+		if ( levels[i][0] === 0 ) continue;
+		returntext += ' ' + levels[i][0] + ' ' +  levels[i][1];
+	}
+	return returntext.trim();
 }
