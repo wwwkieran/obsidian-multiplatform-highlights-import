@@ -1,110 +1,41 @@
-# Obsidian Kobo Highlight Importer
+# Obsidian Multi-Platform Book Highlight Importer
 
-This plugin aims to make highlight import from Kobo devices easier.
+This plugin pulls your highlights and annotations from various different reading sources into Obsidian. This plugin reconciles books based on ISBN or title, so if you read the same book on different devices this plugin will only create one note (per book) with all the highlights. 
 
-- [Obsidian Kobo Highlight Importer](#obsidian-kobo-highlight-importer)
-	- [How to use](#how-to-use)
-	- [Templating](#templating)
-		- [Variables](#variables)
-	- [Highlight markers](#highlight-markers)
-	- [Helping Screenshots](#helping-screenshots)
-	- [Obsidian Callouts](#obsidian-callouts)
-	- [Contributing](#contributing)
+### Currently supported data sources
+- [x] Kobo
+- [x] Apple books
+- [ ] Kindle
+- [ ] Any other service you can suggest
+
+### Why would I use this instead of kobo-highlights-importer / apple-books-highlights-plugin etc.?
+1. **Highlights/annotations of the same book made using different services will be reconciled and consolidated into one note.**
+2. **Note format is standardized regardless of reading platform.** Even if you do not read the same book across multiple services, you might read different books on different services. This plugin can still help you by getting all your annotations into one standard note format. 
 
 ## How to use
+1. Install the plugin, either from the Obsidian plugin library or by cloning this repo to `/your/vault/.obsidian/plugins/`.
+2. Enable the plugin on the `Community plugins` page. 
+3. Configure the plugin on the `Multiplatform Highlights Importer` page. Here you can enable the reading services you would like to extract from. Note that some extractor require additional configuration (see below).
+4. Trigger extraction by clicking the eBook icon in the sidebar or by using the `Import multiplatform highlights` command in the command palette.
 
-Once installed, the steps to import your highlights directly into the vault are:
+### Extractor specific configuration
+#### Kobo
+You need to specify the path to your `KoboReader.sqlite` database. It is located in the `/.kobo` folder on your Kobo when you plug it in to your computer. On a Mac, this would be `/Volumes/KOBOeReader/.kobo/KoboReader.sqlite`.
 
-1. Connect your Kobo device to PC using a proper USB cable
-2. Check if it has mounted automatically, or mount it manually (e.g. open the root folder of your Kobo using a file
-   manager)
-3. Open the import window using the plugin button
-4. Locate _KoboReader.sqlite_ in the _.kobo_ folder ( this folder is hidden, so if you don't see it you should enable
-   hidden files view from system configs )
-5. Extract
-
-## Templating
-
-The default template is:
-
-```markdown
----
-title: {{Title}}
-author: {{Author}}
-publisher: {{Publisher}}
-dateLastRead: {{DateLastRead}}
-readStatus: {{ReadStatus}}
-percentRead: {{PercentRead}}
-isbn: {{ISBN}}
-series: {{Series}}
-seriesNumber: {{SeriesNumber}}
-timeSpentReading: {{TimeSpentReading}}
----
-
-# {{Title}}
-
-## Description
-
-{{Description}}
-
-## Highlights
-
-{{highlights}}
-```
-
-### Variables
-
-| Tag              | Description                                      | Example                |
-| ---------------- | ------------------------------------------------ | ---------------------- |
-| highlights       | Will get replaced with the extracted highlights. | `{{highlights}}`       |
-| title            | The title of the book.                           | `{{title}}`            |
-| author           | The author of the book.                          | `{{author}}`           |
-| pulbisher        | The publisher of the book                        | `{{publihser}}`        |
-| dateLastRead     | The date the book was last read in ISO format.   | `{{dateLastRead}}`     |
-| readStatus       | Can be: Unopened, Reading, Read.                 | `{{readStatus}}`       |
-| isbn             | The ISBN of the book.                            | `{{isbn}}`             |
-| series           | The series of which the book is a part of.       | `{{series}}`           |
-| seriesNumber     | The position of the book in the series.          | `{{seriesNumber}}`     |
-| timeSpentReading | The time spent reading the book.                 | `{{timeSpentReading}}` |
-
-## Highlight markers
-The plugin uses comments as highlight markers, to enable support for keeping existing highlights. All content between these markers will be transferred to the updated file. 
-
-```
-%%START-<MARKER IDENTIFIER>%%
-
-%% Here you can type whatever you want, it will not be overwritten by the plugin. %%
-
-%%START-EXTRACTED-HIGHLIGHT-<MARKER IDENTIFIER>%%
-...highlight
-%%END-EXTRACTED-HIGHLIGHT-<MARKER IDENTIFIER>%%
-
-%% Here you can type whatever you want, it will not be overwritten by the plugin. $$
-
-%%END-<MARKER IDENTIFIER>%%`
-```
-
-![](./README_assets/IMG_0078.png)
-![](./README_assets/IMG_0079.png)
-
-## Helping Screenshots
-
-![](./README_assets/step1.png)
-![](./README_assets/step2.png)
-![](./README_assets/step3.png)
-![](./README_assets/step4.png)
-
-## Obsidian Callouts
-
-Kobo Highlight Importer uses Obsidian callouts for the highlights and annotations imported; Which can be configured
-individually. Turning this toggle off will fallback to the standard markdown block quotes for highlights only.
-
-![](./README_assets/Callout_Settings.png)
-![](./README_assets/Callouts.png)
-
-Check the [documentation](https://help.obsidian.md/How+to/Use+callouts") to get a list of all available callouts that
-obsidian offers.
+#### Apple Books
+**macOS only** No additional configuration is necessary (beyond enabling the extractor)
 
 ## Contributing
+I would really appreciate contributions, either to develop connections to new services or to improve the note generation process (or anything else you can think of)!.
 
-Please feel free to test, send feedbacks using Issues and open Pull Requests to improve the process. 
+### Architecture
+
+### Future work
+- Support for article services (Pocket, Zotero)
+- Specify different destination folders for different services (reconcile at the folder level)
+- Specify destination folders based on tags
+- More customization of note format
+
+## Acknowledgements
+I built this plugin by forking [obsidian-kobo-highlights-import](https://github.com/OGKevin/obsidian-kobo-highlights-import) because I wanted Kobo support and I liked how their output notes grouped annotations by chapter. 
+I also looked at the code for [obsidian-apple-books-highlight-plugin](https://github.com/bandantonio/obsidian-apple-books-highlights-plugin) to build the Apple Books plugin. Thank you to the creators of those plugins. 

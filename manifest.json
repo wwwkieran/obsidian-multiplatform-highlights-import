@@ -1,9 +1,9 @@
 {
 	"id": "obsidian-multiplatform-book-highlights-import-plugin",
 	"name": "Multiplatform Highlights Importer",
-	"version": "2.0.0",
+	"version": "0.1.0",
 	"minAppVersion": "0.15.9",
-	"description": "Import  and consolidate highlights from all reading sources.",
+	"description": "Import and consolidate highlights from all reading sources.",
 	"author": "wwwkieran",
 	"authorUrl": "https://github.com/wwwkieran",
 	"isDesktopOnly": true

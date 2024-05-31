@@ -1,10 +1,9 @@
 import {IExtractor} from "../interfaces/IExtractor";
 import {KoboHighlightsImporterSettings} from "../settings/Settings";
-import {IBookReadStatus, IBookWithHighlights} from "../interfaces/IBook";
+import {IBook, IBookWithHighlights} from "../interfaces/IBook";
 import SqlJs, {Database, Statement} from "sql.js";
 import {binary} from "../binaries/sql-wasm";
 import fs from "fs";
-import {BookDetails, Bookmark, Content, Highlight} from "../database/interfaces";
 import {IHighlight} from "../interfaces/IHighlight";
 
 export class KoboExtractor implements IExtractor {
@@ -42,19 +41,7 @@ export class KoboExtractor implements IExtractor {
 				continue
 			}
 			out.push(<IBookWithHighlights>{
-				book: {
-					title: details.title,
-					author: details.author,
-					description: details.description,
-					publisher: details.publisher,
-					dateLastRead: details.dateLastRead,
-					readStatus: details.readStatus,
-					percentRead: details.percentRead,
-					isbn: details.isbn,
-					series: details.series,
-					seriesNumber: details.seriesNumber,
-					timeSpentReading: details.timeSpentReading,
-				},
+				book: details,
 				highlights: titleToHighlights.get(bookTitle)
 			})
 		}
@@ -293,7 +280,7 @@ export class Repository {
 		return contents
 	}
 
-	async getBookDetailsByBookTitle(bookTitle: string): Promise<BookDetails | null> {
+	async getBookDetailsByBookTitle(bookTitle: string): Promise<IBook | null> {
 		const statement = this.db.prepare(
 			`select Attribution, Description, Publisher, DateLastRead, ReadStatus, ___PercentRead, ISBN, Series, SeriesNumber, TimeSpentReading from content where Title = $title limit 1;`,
 			{
@@ -344,4 +331,24 @@ export class Repository {
 
 		return contents
 	}
+}
+
+export interface Bookmark {
+	bookmarkId: string,
+	text: string;
+	contentId: string;
+	note?: string;
+	dateCreated: Date
+}
+
+export interface Content {
+	title: string;
+	contentId: string;
+	chapterIdBookmarked?: string;
+	bookTitle?: string;
+}
+
+export interface Highlight {
+	bookmark: Bookmark;
+	content: Content;
 }
