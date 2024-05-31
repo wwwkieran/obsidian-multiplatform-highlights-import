@@ -174,11 +174,11 @@ export class Aggregator {
 				publisher:  old.book.publisher ??  New.book.publisher,
 				dateLastRead:  old.book.dateLastRead ?? New.book.dateLastRead,
 				readStatus:  old.book.readStatus ?? New.book.readStatus,
-				percentRead:  old.book.percentRead ?? New.book.percentRead,
+				percentRead:  Math.max(old.book.percentRead ?? 0, New.book.percentRead ?? 0),
 				isbn: old.book.isbn,
 				series:  old.book.series ?? New.book.series,
 				seriesNumber:  old.book.seriesNumber ?? New.book.seriesNumber,
-				timeSpentReading:  old.book.timeSpentReading ?? New.book.timeSpentReading,
+				timeSpentReading:  (old.book.timeSpentReading ?? 0) + (New.book.timeSpentReading ?? 0),
 		}
 
 		// We don't care about highlight sort order in the map.
