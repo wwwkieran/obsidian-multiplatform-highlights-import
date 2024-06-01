@@ -22,13 +22,28 @@ This plugin pulls your highlights and annotations from various different reading
 #### Kobo
 You need to specify the path to your `KoboReader.sqlite` database. It is located in the `/.kobo` folder on your Kobo when you plug it in to your computer. On a Mac, this would be `/Volumes/KOBOeReader/.kobo/KoboReader.sqlite`.
 
-#### Apple Books
-**macOS only** No additional configuration is necessary (beyond enabling the extractor)
+#### Apple Books (macOS only)
+No additional configuration is necessary beyond enabling the extractor on the `Multiplatform Highlights Importer` settings page. Note that this extractor only works on macOS.
 
 ## Contributing
 I would really appreciate contributions, either to develop connections to new services or to improve the note generation process (or anything else you can think of)!.
 
 ### Architecture
+The modular architecture of this plugin is really what distinguishes this plugin from others in the space. 
+The highlight extraction logic 
+
+In pseudocode, the main extraction loop looks something like this: 
+```
+for (extractor of extractors) {
+	booksWithHighlights = extractor.extractHighlights()
+	aggregator.addBooks(booksWithHighlights)
+}
+aggregator.outputMarkdown()
+
+
+```
+
+### Why you should contribute to this plugin instead of writing your own
 
 ### Future work
 - Support for article services (Pocket, Zotero)
