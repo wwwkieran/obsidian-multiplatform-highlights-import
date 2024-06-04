@@ -5,6 +5,8 @@ import { FolderSuggestor } from "./suggestors/FolderSuggestor";
 import fs from "fs";
 
 export const DEFAULT_SETTINGS: KoboHighlightsImporterSettings = {
+	enableKobo: false,
+	enableAppleBooks: false,
 	koboSqlitePath: '',
     storageFolder: '',
     includeCreatedDate: false,
@@ -17,6 +19,8 @@ export const DEFAULT_SETTINGS: KoboHighlightsImporterSettings = {
 }
 
 export interface KoboHighlightsImporterSettings {
+	enableKobo: boolean;
+	enableAppleBooks: boolean;
 	koboSqlitePath: string;
     storageFolder: string;
     includeCreatedDate: boolean;
@@ -37,7 +41,13 @@ export class KoboHighlightsImporterSettingsTab extends PluginSettingTab {
         this.containerEl.empty();
         this.containerEl.createEl('h2', { text: this.plugin.manifest.name });
 
+		this.containerEl.createEl('h3', { text: "Extractor Settings" })
+		this.containerEl.createEl('p', { text: "Configure the data sources from which you will pull highlights." })
 		this.add_kobo_path()
+		this.add_apple_books()
+
+		this.containerEl.createEl('h3', { text: "Output Settings" })
+		this.containerEl.createEl('p', { text: "Configure how the highlights will output in Obsidian." })
         this.add_destination_folder();
         this.add_enable_creation_date();
         this.add_date_format();
@@ -49,9 +59,21 @@ export class KoboHighlightsImporterSettingsTab extends PluginSettingTab {
     }
 
 	add_kobo_path(): void {
+		this.containerEl.createEl('h4', { text: "Kobo" })
+
+		new Setting(this.containerEl)
+			.setName("Enable Kobo extractor")
+			.addToggle((toggle) => {
+				toggle.setValue(this.plugin.settings.enableKobo)
+					.onChange((value) => {
+						this.plugin.settings.enableKobo = value;
+						this.plugin.saveSettings();
+					})
+			})
+
 		new Setting(this.containerEl)
 			.setName("Kobo DB filepath")
-			.setDesc("Path to the kobo db on your system. (Try dragging and dropping the file here)")
+			.setDesc("Path to the kobo db on your system.")
 			.addText((text) =>
 				text
 					.setPlaceholder("")
@@ -67,6 +89,21 @@ export class KoboHighlightsImporterSettingsTab extends PluginSettingTab {
 							}
 						})
 					}));
+	}
+
+	add_apple_books(): void {
+		this.containerEl.createEl('h4', { text: "Apple Books" })
+
+		new Setting(this.containerEl)
+			.setName("Enable Apple Books extractor")
+			.setDesc("Apple Books extraction is only compatible with macOS")
+			.addToggle((toggle) => {
+				toggle.setValue(this.plugin.settings.enableAppleBooks)
+					.onChange((value) => {
+						this.plugin.settings.enableAppleBooks = value;
+						this.plugin.saveSettings();
+					})
+			})
 	}
 
     add_destination_folder(): void {

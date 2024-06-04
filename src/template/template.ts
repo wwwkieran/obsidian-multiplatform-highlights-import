@@ -1,5 +1,4 @@
-import { BookDetails, ReadStatus } from "../database/interfaces"
-import {IBook} from "../interfaces/IBook";
+import {IBook, IBookReadStatus} from "../interfaces/IBook";
 import {sanitize} from "sanitize-filename-ts";
 
 export const defaultTemplate = `
@@ -49,7 +48,7 @@ export function applyTemplateTransformations(
 		)
 		.replace(
 			/{{\s*ReadStatus\s*}}/gi,
-			ReadStatus[bookDetails.readStatus ?? ReadStatus.Unknown],
+			IBookReadStatus[bookDetails.readStatus ?? IBookReadStatus.Unknown],
 		)
 		.replace(
 			/{{\s*PercentRead\s*}}/gi,

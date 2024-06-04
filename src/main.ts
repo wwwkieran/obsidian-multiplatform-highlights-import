@@ -54,11 +54,15 @@ export default class KoboHighlightsImporter extends Plugin {
 	async extractHighlights() {
 		const aggregator = new Aggregator()
 
-		const koboHighlights = await new KoboExtractor().extractHighlights(this.settings)
-		aggregator.addBooks(koboHighlights)
+		if (this.settings.enableKobo) {
+			const koboHighlights = await new KoboExtractor().extractHighlights(this.settings)
+			aggregator.addBooks(koboHighlights)
+		}
 
-		const appleBooksHighlights = await new AppleBooksExtractor().extractHighlights(this.settings)
-		aggregator.addBooks(appleBooksHighlights)
+		if (this.settings.enableAppleBooks) {
+			const appleBooksHighlights = await new AppleBooksExtractor().extractHighlights(this.settings)
+			aggregator.addBooks(appleBooksHighlights)
+		}
 
 		await aggregator.outputMarkdown(this.settings, this.app)
 	}
