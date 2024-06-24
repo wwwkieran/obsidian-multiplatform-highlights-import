@@ -2,7 +2,6 @@ import {IBook, IBookWithHighlights} from "./interfaces/IBook";
 import {IHighlight} from "./interfaces/IHighlight";
 import moment from "moment/moment";
 import {KoboHighlightsImporterSettings} from "./settings/Settings";
-import {sanitize} from "sanitize-filename-ts";
 import {App, normalizePath} from "obsidian";
 import {applyTemplateTransformations} from "./template/template";
 import {getTemplateContents} from "./template/templateContents";
@@ -30,8 +29,7 @@ export class Aggregator {
 			})
 
 			// Check if file already exists
-			const sanitizedBookName = sanitize(book.book.title)
-			const fileName = normalizePath(`${settings.storageFolder}/${sanitizedBookName}.md`)
+			const fileName = normalizePath(`${settings.storageFolder}/${book.book.title}.md`)
 			// Check if file already exists
 			let existingFile;
 			try {
@@ -101,7 +99,7 @@ export class Aggregator {
 		}
 
 		if (settings.includeCreatedDate) {
-			highlightContent += ` — [[${moment(highlight.dateCreated).format(settings.dateFormat)}]]`
+			highlightContent += ` — [[${ moment(highlight.dateCreated, false).format(settings.dateFormat)}]]`
 		}
 
 		text += highlightContent

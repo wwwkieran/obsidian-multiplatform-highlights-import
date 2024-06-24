@@ -14,7 +14,7 @@ export default class KoboHighlightsImporter extends Plugin {
 		await this.loadSettings();
 
 		// This creates an icon in the left ribbon.
-		const KoboHighlightsImporterIconEl = this.addRibbonIcon('e-reader', 'Import Book Highlights', () => {
+		const KoboHighlightsImporterIconEl = this.addRibbonIcon('e-reader', 'Import book highlights', () => {
 			this.extractHighlights().then(() => {
 				new Notice('Extracted highlights from books!')
 			}).catch(e => {

@@ -39,14 +39,13 @@ export class KoboHighlightsImporterSettingsTab extends PluginSettingTab {
 
     display(): void {
         this.containerEl.empty();
-        this.containerEl.createEl('h2', { text: this.plugin.manifest.name });
 
-		this.containerEl.createEl('h3', { text: "Extractor Settings" })
+		new Setting(this.containerEl).setName('Highlight Extraction').setHeading();
 		this.containerEl.createEl('p', { text: "Configure the data sources from which you will pull highlights." })
 		this.add_kobo_path()
 		this.add_apple_books()
 
-		this.containerEl.createEl('h3', { text: "Output Settings" })
+		new Setting(this.containerEl).setName('Output').setHeading();
 		this.containerEl.createEl('p', { text: "Configure how the highlights will output in Obsidian." })
         this.add_destination_folder();
         this.add_enable_creation_date();
@@ -59,8 +58,6 @@ export class KoboHighlightsImporterSettingsTab extends PluginSettingTab {
     }
 
 	add_kobo_path(): void {
-		this.containerEl.createEl('h4', { text: "Kobo" })
-
 		new Setting(this.containerEl)
 			.setName("Enable Kobo extractor")
 			.addToggle((toggle) => {
@@ -92,8 +89,6 @@ export class KoboHighlightsImporterSettingsTab extends PluginSettingTab {
 	}
 
 	add_apple_books(): void {
-		this.containerEl.createEl('h4', { text: "Apple Books" })
-
 		new Setting(this.containerEl)
 			.setName("Enable Apple Books extractor")
 			.setDesc("Apple Books extraction is only compatible with macOS")
