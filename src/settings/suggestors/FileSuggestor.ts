@@ -1,9 +1,8 @@
 // source: https://github.com/liamcain/obsidian-periodic-notes/blob/04965a1e03932d804f6dd42c2e5dba0ede010d79/src/ui/file-suggest.ts
 
-import { TAbstractFile, TFile } from "obsidian";
-import { TextInputSuggest } from "./Suggest";
+import {AbstractInputSuggest, TAbstractFile, TFile} from "obsidian";
 
-export class FileSuggestor extends TextInputSuggest<TFile> {
+export class FileSuggestor extends AbstractInputSuggest<TFile> {
     getSuggestions(inputStr: string): TFile[] {
         const abstractFiles = this.app.vault.getAllLoadedFiles();
         const files: TFile[] = [];
@@ -27,8 +26,7 @@ export class FileSuggestor extends TextInputSuggest<TFile> {
     }
 
     selectSuggestion(file: TFile): void {
-        this.inputEl.value = file.path;
-        this.inputEl.trigger("input");
-        this.close();
+		this.setValue(file.path);
+		this.close();
     }
 }
