@@ -1,6 +1,5 @@
 import builtins from 'builtin-modules';
 import esbuild from "esbuild";
-import watPlugin from 'esbuild-plugin-wat';
 import process from "process";
 
 const banner =
@@ -45,9 +44,10 @@ esbuild.build({
 		...builtins],
 	format: 'cjs',
 	target: 'es2016',
+	loader: {['.wasm']: 'binary'},
 	logLevel: "info",
 	sourcemap: prod ? false : 'inline',
 	treeShaking: true,
 	outfile: 'main.js',
-	plugins: [watPlugin()]
+	plugins: []
 }).catch(() => process.exit(1));

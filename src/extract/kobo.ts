@@ -2,7 +2,9 @@ import {IExtractor} from "../interfaces/IExtractor";
 import {KoboHighlightsImporterSettings} from "../settings/Settings";
 import {IBook, IBookWithHighlights} from "../interfaces/IBook";
 import SqlJs, {Database, Statement} from "sql.js";
-import {binary} from "../binaries/sql-wasm";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import uint8array from '../binaries/sql-wasm.wasm';
 import fs from "fs";
 import {IHighlight} from "../interfaces/IHighlight";
 
@@ -13,7 +15,7 @@ export class KoboExtractor implements IExtractor {
 
 	async extractHighlights(settings: KoboHighlightsImporterSettings): Promise<IBookWithHighlights[]> {
 		const SQLEngine =  await SqlJs({
-			wasmBinary: binary
+			wasmBinary: uint8array.buffer
 		})
 		const fileBuffer = fs.readFileSync(settings.koboSqlitePath)
 		const db = new SQLEngine.Database(fileBuffer)

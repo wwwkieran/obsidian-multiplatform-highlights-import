@@ -2,14 +2,16 @@ import {IExtractor} from "../interfaces/IExtractor";
 import {KoboHighlightsImporterSettings} from "../settings/Settings";
 import {IBookWithHighlights} from "../interfaces/IBook";
 import SqlJs from "sql.js";
-import {binary} from "../binaries/sql-wasm";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import binary from '../binaries/sql-wasm.wasm';
 import fs from "fs";
 import os from "os";
 
 export class AppleBooksExtractor implements IExtractor {
 	async extractHighlights(settings: KoboHighlightsImporterSettings): Promise<IBookWithHighlights[]> {
 		const SQLEngine = await SqlJs({
-			wasmBinary: binary
+			wasmBinary: binary.buffer
 		})
 
 		const books = await this.getBooks(SQLEngine)
