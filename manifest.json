@@ -1,7 +1,7 @@
 {
 	"id": "multiplatform-highlights-import",
 	"name": "Multiplatform Highlights Importer",
-	"version": "0.1.0",
+	"version": "0.1.2",
 	"minAppVersion": "1.6.4",
 	"description": "Import and consolidate highlights from different reading sources. Supports reconciling books across reading sources.",
 	"author": "wwwkieran",
