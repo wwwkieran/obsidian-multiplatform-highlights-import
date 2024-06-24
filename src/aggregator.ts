@@ -5,6 +5,7 @@ import {KoboHighlightsImporterSettings} from "./settings/Settings";
 import {App, normalizePath} from "obsidian";
 import {applyTemplateTransformations} from "./template/template";
 import {getTemplateContents} from "./template/templateContents";
+import {sanitize} from "sanitize-filename-ts";
 
 export const typeWhateverYouWantPlaceholder = `%% Here you can type whatever you want, it will not be overwritten by the plugin. %%`
 
@@ -29,7 +30,8 @@ export class Aggregator {
 			})
 
 			// Check if file already exists
-			const fileName = normalizePath(`${settings.storageFolder}/${book.book.title}.md`)
+			const sanitizedBookName = sanitize(book.book.title)
+			const fileName = normalizePath(`${settings.storageFolder}/${sanitizedBookName}.md`)
 			// Check if file already exists
 			let existingFile;
 			try {
